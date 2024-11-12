@@ -1,17 +1,17 @@
 <?php
 session_start();
 
-$mysqli = new mysqli(null,"root","pass","simple_todo_db","3306");
+$mysqli = new mysqli(null, "root", "pass", "simple_todo_db", "3306");
 
 if ($mysqli->connect_errno) {
-  echo "". $mysqli->connect_error;
+  echo "" . $mysqli->connect_error;
   exit();
 }
 
-$result = $mysqli->query("SELECT * FROM tasks");
+$result = $mysqli->query("SELECT * FROM tasks WHERE user_id = " . $_SESSION["id"]);
 
 if (!$result) {
-  echo "". $mysqli->error;
+  echo "" . $mysqli->error;
   exit();
 }
 

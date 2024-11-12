@@ -5,16 +5,16 @@ $mysqli = new mysqli(null, "root", "pass", "simple_todo_db", "3306");
 
 if ($mysqli->connect_errno) {
   $_SESSION["import-error"] = $mysqli->connect_error;
-  header("Location: index.php");
+  header("Location: home.php");
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-  header('Location: index.php');
+  header('Location: home.php');
 }
 
 if (empty($_FILES)) {
   $_SESSION['import-error'] = 'File is empty';
-  header('Location: index.php');
+  header('Location: home.php');
 }
 
 if ($_FILES['import']['error'] !== UPLOAD_ERR_OK) {
@@ -36,7 +36,7 @@ if ($_FILES['import']['error'] !== UPLOAD_ERR_OK) {
     default:
       $_SESSION['import-error'] = 'Unknown upload error';
     
-    header('Location: index.php');
+    header('Location: home.php');
   }
 }
 
@@ -47,12 +47,12 @@ $fileExtension = $_FILES['import']['type'];
 
 if (strtolower($fileExtension) !== 'text/csv') {
   $_SESSION['import-error'] = 'Invalid file type';
-  header('Location: index.php');
+  header('Location: home.php');
 }
 
 if (($handle = fopen($fileTmpPath,'r')) === false) {
   $_SESSION['import-error'] = 'Failed to open file';
-  header('Location: index.php');
+  header('Location: home.php');
 }
 
 // Export has no header
@@ -64,7 +64,6 @@ while (($data = fgetcsv($handle, 1000, ',')) !== false) {
   $description = $mysqli->real_escape_string($data[2]);
   $status = $mysqli->real_escape_string($data[3]);
   $created_at = $mysqli->real_escape_string($data[4]);
-  $deadline = $mysqli->real_escape_string($data[5]);
 
   while ($mysqli->query('SELECT * FROM tasks WHERE id = ' . $id)->num_rows > 0) {
     $id++;
@@ -75,4 +74,4 @@ while (($data = fgetcsv($handle, 1000, ',')) !== false) {
 }
 
 $mysqli->close();
-header('Location: index.php');
+header('Location: home.php');

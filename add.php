@@ -11,11 +11,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   $task = $mysqli->real_escape_string($_POST['task-input']);
   if (!valid_input($task)) {
     $_SESSION["task-input"] = "Invalid task input";
-    header("Location: index.php");
+    header("Location: home.php");
     exit();
   }
 
-  $sql = "INSERT INTO tasks (name, status) VALUES ('$task', 0)";
+  $sql = "INSERT INTO tasks (name, status, user_id) VALUES ('$task', 0, ".$_SESSION['id'].")";
   if ($mysqli->query($sql) === TRUE) {
     $_SESSION["task-input"] = "Task added";
   } else {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $_SESSION["task-input"]["desc"] = $mysqli->error;
   }
 
-  header("Location: index.php");
+  header("Location: home.php");
 }
 
 function valid_input($input) {
