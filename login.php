@@ -24,6 +24,10 @@ session_start();
         }
       ?>
     </form>
+    <h3>Don't have an account?</h3>
+    <form method="GET" action="register.php">
+      <button type="submit">Register</button>
+    </form>
   </div>
 </body>
 </html>

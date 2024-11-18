@@ -8,6 +8,24 @@ if ($mysqli->connect_errno) {
   exit();
 }
 
+if (isset($_SESSION["registering"]) && isset($_SESSION["name"]) && isset($_POST["password"])) {
+  $name = htmlspecialchars($_POST["name"]);
+  $password = htmlspecialchars($_POST["password"]);
+
+  if ($mysqli->query("SELECT * FROM todo_users WHERE name = '$name'")->num_rows > 0) {
+    $_SESSION["register-error"] = "Name already exists";
+    header("Location: register.php");
+  }
+
+  $mysqli->query("INSERT INTO `todo_users` (`name`, `password`) VALUES ('$name', '$password');");
+
+} else if (isset($_SESSION["registering"])) {
+  $_SESSION["register-error"] = "Please input name and password!";
+  header("Location: register.php");
+}
+
+unset($_SESSION["registering"]);
+
 if (isset($_POST["name"]) && isset($_POST["password"])) {
   $name = htmlspecialchars($_POST["name"]);
   $password = htmlspecialchars($_POST["password"]);
